@@ -12,18 +12,32 @@
 
 #include "get_next_line.h"
 
-// ssize_t read(int fd, void *buf, size_t count);
-
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 0
+#define BUFFER_SIZE 100 // TODO replace with 0
 #endif
 
 char	*get_next_line(int fd)
-{
-	char	*buffer;
+{  
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*line;
+	int			i;
+	int			count;
 
-	buffer = malloc(BUFFER_SIZE * sizeof(char));
-	read(fd, buffer, BUFFER_SIZE);
-
-	return buffer;
+	if (read(fd, buffer, 0) < 0)
+		return (NULL);
+	count = read(fd, buffer, BUFFER_SIZE);
+	i = 0;
+	line = malloc(1 * sizeof(char));
+	while (buffer[i])
+	{
+		line = ft_realloc(line, (ft_strlen(line) + 2) * sizeof(char));
+		line[i] = buffer[i];
+		if (line[i] == '\n')
+			break;
+		i++;
+	}
+	if (line[i] == '\n')
+		return (line);
+	free(line);
+	return (NULL);
 }

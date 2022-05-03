@@ -25,7 +25,7 @@ void	*ft_realloc(void *ptr, size_t new_size)
 	if (rtn == NULL)
 		return (NULL);
 	temp = (char *)ptr;
-	while (temp && rtn)
+	while (temp[i])
 	{
 		rtn[i] = temp[i];
 		i++;
