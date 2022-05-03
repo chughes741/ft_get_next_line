@@ -18,5 +18,7 @@
 #include <stdlib.h>
 
 char	*get_next_line(int fd);
+void	*ft_realloc(void *ptr, size_t new_size);
+size_t	ft_strlen(const char *str);
 
 #endif
