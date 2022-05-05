@@ -13,28 +13,30 @@
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 0 // TODO replace with 0
+#define BUFFER_SIZE 0 // TODO 0 before submitting
 #endif
 
-char	*get_next_line(int fd)
-{  
+char	*ft_get_line(char *buffer) {
+	(void)buffer;
+	return (NULL);
+}
+
+char	*get_next_line(int fd) {
 	static char	*buffer;
 	char		*line;
+	int			i;
 
-	if (read(fd, buffer, 0) < 0 || BUFFER_SIZE == 0)
-		return (NULL);
-	buffer = ft_calloc(2, sizeof(char));
+	i = 0;
+	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0) return (NULL);
 	line = ft_calloc(1, sizeof(char));
-	while (buffer[0] != '\n')
+	while(line) // TODO add break conditions
 	{
-		read(fd, buffer, 1);
-		line = ft_strjoin(line, buffer);
+		buffer = ft_calloc(BUFFER_SIZE +1, sizeof(char));
+		read(fd, buffer, BUFFER_SIZE);
+		line = ft_get_line(buffer);
+		if (ft_strchr(line, '\n')) return (line);
+		free(buffer);
 	}
-	if (line[ft_strlen(line) - 1] != '\n')
-	{	
-		free(line);
-		return (NULL);
-	}
-	free(buffer);
-	return (line);
+	free(line);
+	return (NULL);
 }
