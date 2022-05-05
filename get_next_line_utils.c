@@ -97,3 +97,70 @@ char	*ft_strjoin(char *s1, char *s2)
 	free(s1);
 	return (rtn);
 }
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char		*str;
+	const char	*first;
+
+	first = &s[start];
+	str = ft_calloc((len + 1), sizeof(char));
+	if (start > ft_strlen(s))
+		return (str);
+	if (str == NULL)
+		return (NULL);
+	ft_strlcpy(str, first, (len + 1));
+	str[len] = '\0';
+	return (str);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	srclen;
+
+	i = 0;
+	srclen = ft_strlen(src);
+	if (size == 0)
+		return (srclen);
+	while (i < size - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (srclen);
+}
+
+size_t	ft_linelen(const char *str)
+{
+	int		i;
+	size_t	output;
+	char	*ptr;
+
+	i = 0;
+	ptr = (char *)str;
+	while (*ptr != '\n')
+	{
+		i++;
+		ptr++;
+	}
+	output = (sizeof(char) * i);
+	return (output);
+}
+
+int	ft_strichr(const char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	if (str[i] == c)
+		return (i);
+	return (0);
+}
