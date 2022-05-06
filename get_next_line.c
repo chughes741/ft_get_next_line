@@ -13,30 +13,46 @@
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 0 // TODO 0 before submitting
+#define BUFFER_SIZE 100 // TODO 0 before submitting
 #endif
 
-char	*ft_get_line(char *buffer) {
-	(void)buffer;
-	return (NULL);
+char	*ft_get_line(char *line, char *buffer, int fd)
+{
+	// If return from buffer < buffersize : append and return
+	while (fd > 0) // Copies buffer into line
+	{
+		read(fd, buffer, BUFFER_SIZE);
+		if (line == NULL)
+		{
+			if (!ft_strchr(buffer, '\n'))
+				line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+			else
+				line = ft_calloc(ft_strichr(buffer, '\n') + 1, sizeof(char));
+			ft_strlcpy(line, buffer, BUFFER_SIZE);
+		}
+		else
+			line = ft_strjoin(line, buffer);
+		free(buffer);
+		if (ft_strchr(line, '\n') != NULL || read(fd, 0, 0) <= 0)
+			break ;
+	}	
+	return (line);
 }
 
-char	*get_next_line(int fd) {
+char	*get_next_line(int fd)
+{
 	static char	*buffer;
 	char		*line;
-	int			i;
 
-	i = 0;
-	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0) return (NULL);
-	line = ft_calloc(1, sizeof(char));
-	while(line) // TODO add break conditions
-	{
-		buffer = ft_calloc(BUFFER_SIZE +1, sizeof(char));
-		read(fd, buffer, BUFFER_SIZE);
-		line = ft_get_line(buffer);
-		if (ft_strchr(line, '\n')) return (line);
-		free(buffer);
-	}
+	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buffer = ft_calloc(BUFFER_SIZE +1, sizeof(char));
+	if (buffer == NULL)
+		return (NULL);
+	line = NULL;
+	line = ft_get_line(line, buffer, fd);
+	if (ft_strchr(line, '\n'))
+		return (line);
 	free(line);
 	return (NULL);
 }
