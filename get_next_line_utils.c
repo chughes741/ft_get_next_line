@@ -60,6 +60,8 @@ char	*ft_strchr(const char *str, int c)
 {
 	int	i;
 
+	if (str == NULL)
+		return (NULL);
 	i = 0;
 	while (str[i])
 	{
