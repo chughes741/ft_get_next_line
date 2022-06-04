@@ -103,7 +103,7 @@ char	*ft_strjoinfree(char *s1, char *s2)
 		rtn[i + j] = s2[j];
 		j++;
 	}
-	free(s2);
+	free(s1);
 	return (rtn);
 }
 
@@ -156,22 +156,6 @@ size_t	ft_linelen(const char *str)
 	}
 	output = (sizeof(char) * i);
 	return (output);
-}
-
-int	ft_strichr(const char *str, int c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			return (i);
-		i++;
-	}
-	if (str[i] == c)
-		return (i);
-	return (0);
 }
 
 char	*ft_strdup(const char *src)
