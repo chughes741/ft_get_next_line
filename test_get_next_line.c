@@ -5,14 +5,39 @@
 
 
 int main() {
-	int		fd;
-	char*	line;
+	int fd;
+	char line[101];
 
 	fd = open("./test.txt", O_RDONLY);
-	write(1, "...\n", 4);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
+
+	printf("%zi\n", read(fd, line, 100));
+
+	printf("%s\n", line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+
 	close(fd);
 
 	return 0;

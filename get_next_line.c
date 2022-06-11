@@ -16,43 +16,46 @@
 #define BUFFER_SIZE 100 // TODO 0 before submitting
 #endif
 
-char	*ft_get_line(char *line, char *buffer, int fd)
+static ssize_t	zread(int fd, char *buffer)
 {
-	// If return from buffer < buffersize : append and return
-	while (fd > 0) // Copies buffer into line
-	{
-		read(fd, buffer, BUFFER_SIZE);
-		if (line == NULL)
-		{
-			if (!ft_strchr(buffer, '\n'))
-				line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-			else
-				line = ft_calloc(ft_strichr(buffer, '\n') + 1, sizeof(char));
-			ft_strlcpy(line, buffer, BUFFER_SIZE);
-		}
-		else
-			line = ft_strjoin(line, buffer);
-		free(buffer);
-		if (ft_strchr(line, '\n') != NULL || read(fd, 0, 0) <= 0)
-			break ;
-	}	
-	return (line);
+	int	i;
+
+	i = -1;
+	while (++i <= BUFFER_SIZE)
+		buffer[i] = '\0';
+	return (read(fd, buffer, BUFFER_SIZE));
 }
+
+char	*ft_rmvline(char *s)
+{
+	char	*new_stash;
+
+	if (ft_strchr(s, '\n') == NULL)
+		return (s);
+	new_stash = ft_calloc(ft_strlen(s) - ft_linelen(s) + 1, sizeof(char));
+	new_stash = ft_strdup(s + ft_linelen(s) + 1);
+	return (new_stash);
+}
+
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
-	char		*line;
+	static char	*stash;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*rtn;
+	char		*temp;
+	int			count;
 
 	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = ft_calloc(BUFFER_SIZE +1, sizeof(char));
-	if (buffer == NULL)
-		return (NULL);
-	line = NULL;
-	line = ft_get_line(line, buffer, fd);
-	if (ft_strchr(line, '\n'))
-		return (line);
-	free(line);
-	return (NULL);
+	count = BUFFER_SIZE;
+	if (stash == NULL)
+		stash = ft_calloc(1, sizeof(char));
+	while ((count = zread(fd, buffer)) > 0 && !(ft_strchr(stash, '\n')))
+		stash = ft_strappend(stash, buffer);
+	rtn = ft_substr(stash, 0, ft_linelen(stash) + 1);
+	temp = ft_rmvline(stash);
+	free(stash);
+	stash = temp;
+	return (rtn);
 }

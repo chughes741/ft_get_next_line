@@ -74,39 +74,6 @@ char	*ft_strchr(const char *str, int c)
 	return (NULL);
 }
 
-char	*ft_strjoinfree(char *s1, char *s2)
-{
-	char	*rtn;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (s2 == NULL)
-		return (s1);
-	if (s1 == NULL)
-	{
-		s1 = s2;
-		s2 = NULL;
-		return (s1);
-	}
-	rtn = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
-	if (rtn == NULL)
-		return (NULL);
-	while (s1[i])
-	{
-		rtn[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-	{
-		rtn[i + j] = s2[j];
-		j++;
-	}
-	free(s1);
-	return (rtn);
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char		*str;
@@ -141,21 +108,13 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (srclen);
 }
 
-size_t	ft_linelen(const char *str)
+int	ft_linelen(const char *str)
 {
-	int		i;
-	size_t	output;
-	char	*ptr;
+	int	i;
 
-	i = 0;
-	ptr = (char *)str;
-	while (*ptr != '\n')
-	{
-		i++;
-		ptr++;
-	}
-	output = (sizeof(char) * i);
-	return (output);
+	i = -1;
+	while (str[++i] != '\n');
+	return (i);
 }
 
 char	*ft_strdup(const char *src)
@@ -177,4 +136,23 @@ char	*ft_strdup(const char *src)
 		i++;
 	}
 	return (outstr);
+}
+
+char	*ft_strappend(char *s1, char *s2)
+{
+	char	*rtn;
+	int		i;
+	int		j;
+
+	i = -1;
+	j = -1;
+	if (s2[0] == '\0')
+		return (s1);
+	rtn = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
+	while (s1[++i])
+		rtn[i] = s1[i];
+	while (s2[++j])
+		rtn[i + j] = s2[j];
+	free(s1);
+	return (rtn);
 }
