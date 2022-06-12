@@ -62,12 +62,11 @@ char	*ft_strchr(const char *str, int c)
 
 	if (str == NULL)
 		return (NULL);
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		if (str[i] == c)
 			return ((char *)&str[i]);
-		i++;
 	}
 	if (str[i] == c)
 		return ((char *)&str[i]);
