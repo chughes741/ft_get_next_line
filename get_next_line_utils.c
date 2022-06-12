@@ -113,7 +113,7 @@ int	ft_linelen(const char *str)
 	int	i;
 
 	i = -1;
-	while (str[++i] != '\n');
+	while (str[++i] != '\n' && str[i]);
 	return (i);
 }
 
