@@ -25,17 +25,19 @@ static ssize_t	zread(int fd, char *buffer)
 	return (i);
 }
 
-char	*ft_rmvline(char *s)
+char	*ft_rmvline(char **s)
 {
 	char	*new_stash;
 
-	if (ft_strchr(s, '\n') == NULL)
-		return (s);
-	new_stash = ft_calloc(ft_strlen(s) - ft_linelen(s) + 1, sizeof(char));
-	new_stash = ft_strdup(s + ft_linelen(s) + 1);
+	new_stash = NULL;
+	if (ft_strchr(*s, '\n'))
+	{
+		new_stash = ft_calloc(ft_strlen(*s) - ft_linelen(*s) + 1, sizeof(char));
+		new_stash = ft_strdup(*s + ft_linelen(*s) + 1);
+	}
+	free(*s);
 	return (new_stash);
 }
-
 
 char	*get_next_line(int fd)
 {
@@ -44,7 +46,8 @@ char	*get_next_line(int fd)
 	char		*rtn;
 	int			count;
 
-	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
+	// if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	count = BUFFER_SIZE;
 	while ((count = zread(fd, buffer)) > 0)
@@ -55,9 +58,9 @@ char	*get_next_line(int fd)
 		if (ft_strchr(stash, '\n'))
 			break ;
 	}
+	if (stash == NULL)
+		return (NULL);
 	rtn = ft_substr(stash, 0, ft_linelen(stash) + 1);
-	stash = ft_rmvline(stash);
-	if (count == 0)
-		free(stash);
+	stash = ft_rmvline(&stash);
 	return (rtn);
 }
