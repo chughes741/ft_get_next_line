@@ -13,17 +13,16 @@
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 100 // TODO 0 before submitting
+#define BUFFER_SIZE 1 // TODO 0 before submitting
 #endif
 
 static ssize_t	zread(int fd, char *buffer)
 {
 	int	i;
 
-	i = -1;
-	while (++i <= BUFFER_SIZE)
-		buffer[i] = '\0';
-	return (read(fd, buffer, BUFFER_SIZE));
+	i = read(fd, buffer, BUFFER_SIZE);
+	buffer[i] = '\0';
+	return (i);
 }
 
 char	*ft_rmvline(char *s)
@@ -43,19 +42,22 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*rtn;
-	char		*temp;
 	int			count;
 
 	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	count = BUFFER_SIZE;
-	if (stash == NULL)
-		stash = ft_calloc(1, sizeof(char));
-	while ((count = zread(fd, buffer)) > 0 && !(ft_strchr(stash, '\n')))
+	while ((count = zread(fd, buffer)) > 0)
+	{
+		if (stash == NULL)
+			stash = ft_calloc(1, sizeof(char));
 		stash = ft_strappend(stash, buffer);
+		if (ft_strchr(stash, '\n'))
+			break ;
+	}
 	rtn = ft_substr(stash, 0, ft_linelen(stash) + 1);
-	temp = ft_rmvline(stash);
-	free(stash);
-	stash = temp;
+	stash = ft_rmvline(stash);
+	if (count == 0)
+		free(stash);
 	return (rtn);
 }
