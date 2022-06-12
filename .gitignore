@@ -1,3 +1,6 @@
+# VSC files
+.vscode/*
+
 # Prerequisites
 *.d
 
