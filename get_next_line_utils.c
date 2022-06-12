@@ -126,6 +126,8 @@ char	*ft_strdup(const char *src)
 		return (NULL);
 	i = 0;
 	len = ft_strlen(src);
+	if (len == 0)
+		return (NULL);
 	outstr = ft_calloc((len + 1), sizeof(char));
 	if (outstr == NULL)
 		return (NULL);
